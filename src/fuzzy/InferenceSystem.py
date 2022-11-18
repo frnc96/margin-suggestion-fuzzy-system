@@ -79,7 +79,12 @@ class FuzzyInferenceSystem:
                     if subset.name == subset_name:
                         return subset
 
+        raise Exception("No subset found")
+
     def get_recursive_fmin(self, values: []):
+        if len(values) < 2:
+            raise Exception(f"At least 2 values are needed, only {len(values)} found")
+
         x2 = values.pop()
 
         if len(values) == 1:
@@ -90,6 +95,9 @@ class FuzzyInferenceSystem:
         return np.fmin(x1, x2)
 
     def get_recursive_fmax(self, values: []):
+        if len(values) < 2:
+            raise Exception(f"At least 2 values are needed, only {len(values)} found")
+
         x2 = values.pop()
 
         if len(values) == 1:
@@ -120,5 +128,6 @@ class FuzzyInferenceSystem:
 
         # Defuzzify the result
         defuzzified = fuzz.defuzz(self.out_fuzzy_set.x_range, out_margin, defuzzification_method)
+        result = fuzz.interp_membership(self.out_fuzzy_set.x_range, out_margin, defuzzified)
 
-        return fuzz.interp_membership(self.out_fuzzy_set.x_range, out_margin, defuzzified)
+        return defuzzified
