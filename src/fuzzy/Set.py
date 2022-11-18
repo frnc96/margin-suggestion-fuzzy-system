@@ -1,10 +1,15 @@
 import numpy as np
+from src.fuzzy.Subset import FuzzySubset
 
 
 class FuzzySet:
-    def __init__(self, name: str, x_min: int, x_max: int):
-        self.name = name
-        self.x_range = np.arange(x_min, x_max, 1)
+    def __init__(self, name: str, x_min: int, x_max: int, x=None):
+        self.name: str = name
+        self.x_range: [float] = np.arange(x_min, x_max, 1)
+        self.subsets: [FuzzySubset] = []
+        self.x: int = x
 
-    def add_set(self, fuzzy_set):
-        self.fuzzy_sets.append(fuzzy_set)
+    def add_subset(self, fuzzy_subset: FuzzySubset):
+        self.subsets.append(fuzzy_subset)
+
+        return self
