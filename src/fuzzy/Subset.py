@@ -5,3 +5,4 @@ from dataclasses import dataclass
 class FuzzySubset:
     name: str
     membership_degree: [float]
+    membership_range: [float]

@@ -1,59 +1,57 @@
-import time
 from src.fuzzy.InferenceSystem import FuzzyInferenceSystem as Fis
 
-exec_start_time = time.time()
+# Inputs--------------------------------------------------------------------------------------------------------------#
+basePrice_usd = 49.99                                                                                                 #
+pricingTerm_months = 3                                                                                                #
+productRating_stars = 2.5                                                                                             #
+# Inputs--------------------------------------------------------------------------------------------------------------#
 
-# Inputs--------------------#
-basePrice_usd = 49.99       #
-pricingTerm_months = 24     #
-companyFocus_val = 180      #
-# Inputs--------------------#
-
+# Initialization of the Fuzzy Inference System
 fuzzyInferenceSystem = Fis()
 
-# Pricing term fuzzy set and membership functions
+# Here we declare all the input fuzzy sets and their membership functions
 pricingTerm_setName = "pricing_term"
 fuzzyInferenceSystem\
-    .add_set(name=pricingTerm_setName, x_min=100, x_max=251, x=pricingTerm_months)\
-    .add_subset(name="short", set_name=pricingTerm_setName, membership_range=[-30, -5, 180, 200])\
-    .add_subset(name="mid", set_name=pricingTerm_setName, membership_range=[180, 200, 220, 240])\
-    .add_subset(name="long", set_name=pricingTerm_setName, membership_range=[220, 240, 250, 270])
+    .add_set(name=pricingTerm_setName, x_min=1, x_max=12, step=1, x=pricingTerm_months)\
+    .add_subset(name="short", set_name=pricingTerm_setName, membership_range=[-30, -5, 2, 4], mf_type="trapezoidal")\
+    .add_subset(name="mid", set_name=pricingTerm_setName, membership_range=[2, 4, 6, 8], mf_type="trapezoidal")\
+    .add_subset(name="long", set_name=pricingTerm_setName, membership_range=[6, 8, 17, 30], mf_type="trapezoidal")
 
-# Company focus fuzzy set and membership functions
-companyFocus_setName = "company_focus"
+productRating_setName = "product_rating"
 fuzzyInferenceSystem\
-    .add_set(name=companyFocus_setName, x_min=100, x_max=251, x=companyFocus_val)\
-    .add_subset(name="development", set_name=companyFocus_setName, membership_range=[-30, -5, 180, 200])\
-    .add_subset(name="maintenance", set_name=companyFocus_setName, membership_range=[180, 200, 220, 240])\
-    .add_subset(name="profits", set_name=companyFocus_setName, membership_range=[220, 240, 250, 270])
+    .add_set(name=productRating_setName, x_min=1, x_max=5, step=0.25, x=productRating_stars)\
+    .add_subset(name="low", set_name=productRating_setName, membership_range=[-20, -20, 2.75, 3.25], mf_type="trapezoidal")\
+    .add_subset(name="mid", set_name=productRating_setName, membership_range=[2.75, 3.5, 4.25], mf_type="triangular")\
+    .add_subset(name="high", set_name=productRating_setName, membership_range=[3.75, 4.25, 20, 20], mf_type="trapezoidal")
 
-# Company focus fuzzy set and membership functions
+# Here we declare the output fuzzy set which is the profit margin suggestion. We set a minimum margin of 10% and a
+# maximum margin of 300%, we also map the five trapezoidal shaped subsets accordingly.
 fuzzyInferenceSystem\
-    .add_out_set(name="output_margin", x_min=0, x_max=46)\
-    .add_out_subset(name="slim", membership_range=[0, 0, 5, 10])\
-    .add_out_subset(name="little", membership_range=[5, 10, 15, 20])\
-    .add_out_subset(name="mid", membership_range=[15, 20, 25, 30])\
-    .add_out_subset(name="high", membership_range=[25, 30, 35, 40])\
-    .add_out_subset(name="very_high", membership_range=[35, 40, 45, 50])
+    .add_out_set(name="output_margin", x_min=0, x_max=3, step=0.01)\
+    .add_out_subset(name="slim", membership_range=[-20, -20, 0.1, 0.25], mf_type="trapezoidal")\
+    .add_out_subset(name="little", membership_range=[0.1, 0.35, 0.7], mf_type="triangular")\
+    .add_out_subset(name="mid", membership_range=[0.4, 0.9, 1.4], mf_type="triangular")\
+    .add_out_subset(name="high", membership_range=[1, 1.62, 2.25], mf_type="triangular")\
+    .add_out_subset(name="very_high", membership_range=[1.75, 2.25, 20, 20], mf_type="trapezoidal")
 
-# Rule base
+# Plot the sets
+fuzzyInferenceSystem.plot_sets()
+
+# Here we define the rule base, each rule has a name for identification and the corresponding output subset. The rule
+# list stores all the input subsets that lead to that output subset. That list is populated by strings that are composed
+# by the name of the fuzzy set, and it's subset separated by a dot character. This way the list of rules is readable.
 fuzzyInferenceSystem\
     .add_rule(name="Rule#1", out_subset="mid", rules_list=["pricing_term.short"])\
     .add_rule(name="Rule#2", out_subset="little", rules_list=["pricing_term.mid"])\
     .add_rule(name="Rule#3", out_subset="slim", rules_list=["pricing_term.long"])\
-    .add_rule(name="Rule#4", out_subset="slim", rules_list=["company_focus.development"])\
-    .add_rule(name="Rule#5", out_subset="little", rules_list=["company_focus.maintenance"])\
-    .add_rule(name="Rule#6", out_subset="mid", rules_list=["company_focus.profits"])
-    # .add_rule(name="Rule#7", out_subset="high", rules_list=["company_focus.maintenance", "pricing_term.mid"])\
-    # .add_rule(name="Rule#8", out_subset="high", rules_list=["company_focus.maintenance", "pricing_term.mid"])\
-    # .add_rule(name="Rule#9", out_subset="very_high", rules_list=["company_focus.profits", "pricing_term.short"])\
-    # .add_rule(name="Rule#10", out_subset="very_high", rules_list=["company_focus.profits", "pricing_term.short"])
+    .add_rule(name="Rule#4", out_subset="slim", rules_list=["product_rating.low"])\
+    .add_rule(name="Rule#5", out_subset="little", rules_list=["product_rating.mid"])\
+    .add_rule(name="Rule#6", out_subset="mid", rules_list=["product_rating.high"])
 
+# Run a centroid defuzzification method to get a crisp output
 outputValue_crisp = fuzzyInferenceSystem.defuzzify(defuzzification_method='centroid')
 
+# Print out the results
 print(f"Base Price: ${basePrice_usd}")
 print(f"Profit margin: %{(outputValue_crisp * 100):.3f}")
 print(f"Suggested Price: ${(basePrice_usd + (basePrice_usd * outputValue_crisp)):.3f}")
-
-# Script execution info
-print(f'\nScript executed in {(time.time() - exec_start_time):.3f} seconds')

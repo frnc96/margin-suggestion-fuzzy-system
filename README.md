@@ -1,4 +1,4 @@
-# Profit margin suggestions for software products using Fuzzy Logic
+# Value-Based pricing suggestions for SaaS products using Fuzzy Logic
 
 Problem description...
 
@@ -15,8 +15,10 @@ Problem description...
     * Cost Amount (cost of maintaining the product)
   * Fuzzy Input Sets
     * Pricing term (short, mid, long)
-    * Competition pricing (expensive, fair, cheap)
-    * Company focus (development, maintenance, profits)
+    * Monthly active users (low, mid, high)
+    * Daily usage hours (low, mid, high)
+    * Monthly net positive feedback (negative, low, mid, high)
+    * Product market GDP (low, mid, high)
   * Fuzzy Rules
     * [Rule-set Google Sheet](https://docs.google.com/spreadsheets/d/189TuTApM-iDm14cHHxfbSh8yGliFTGe7V4G-6Hky6bg/edit?usp=sharing)
 * Inference

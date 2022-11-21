@@ -12,51 +12,61 @@ class FuzzyInferenceSystem:
         self.rules: [FuzzyRule] = []
         self.out_fuzzy_set = None
 
-    def add_set(self, name: str, x_min: int, x_max: int, x: int):
+    def add_set(self, name: str, x_min: float, x_max: float, x: float, step: float = 1):
         self.fuzzy_sets.append(
-            FuzzySet(name, x_min, x_max, x)
+            FuzzySet(name, x_min, x_max, step, x)
         )
 
         return self
 
-    def add_out_set(self, name: str, x_min: int, x_max: int):
-        self.out_fuzzy_set = FuzzySet(name, x_min, x_max)
+    def add_out_set(self, name: str, x_min: float, x_max: float, step: float = 1):
+        self.out_fuzzy_set = FuzzySet(name, x_min, x_max, step)
 
         return self
 
-    # todo - experiment with other shapes other than trapezoid
-    def add_subset(self, name: str, set_name: str, membership_range: [float]):
+    def add_subset(self, name: str, set_name: str, membership_range: [float], mf_type: str = "trapezoidal"):
         for fuzzy_set in self.fuzzy_sets:
             if fuzzy_set.name == set_name:
-                membership_degree = fuzz.interp_membership(
-                    fuzzy_set.x_range,
-                    mf.trapmf(fuzzy_set.x_range, membership_range),
-                    fuzzy_set.x
-                )
+                if mf_type == "trapezoidal":
+                    membership_function = mf.trapmf(fuzzy_set.x_range, membership_range)
+                elif mf_type == "triangular":
+                    membership_function = mf.trimf(fuzzy_set.x_range, membership_range)
+                else:
+                    raise Exception(f"Membership function of type {mf_type} does not exist or is not supported!")
+
+                membership_degree = fuzz.interp_membership(fuzzy_set.x_range, membership_function, fuzzy_set.x)
+
                 fuzzy_set.add_subset(
-                    FuzzySubset(name, membership_degree)
+                    FuzzySubset(
+                        name=name,
+                        membership_degree=membership_degree,
+                        membership_range=membership_function
+                    )
                 )
                 break
 
         return self
 
-    # todo - experiment with other shapes other than trapezoid
-    def add_out_subset(self, name: str, membership_range: [float]):
+    def add_out_subset(self, name: str, membership_range: [float], mf_type: str = "trapezoidal"):
+        if mf_type == "trapezoidal":
+            membership_function = mf.trapmf(self.out_fuzzy_set.x_range, membership_range)
+        elif mf_type == "triangular":
+            membership_function = mf.trimf(self.out_fuzzy_set.x_range, membership_range)
+        else:
+            raise Exception(f"Membership function of type {mf_type} does not exist or is not supported!")
+
         self.out_fuzzy_set.add_subset(
-            FuzzySubset(
-                name=name,
-                membership_degree=mf.trapmf(self.out_fuzzy_set.x_range, membership_range)
-            )
+            FuzzySubset(name=name, membership_degree=membership_function, membership_range=membership_function)
         )
 
         return self
 
-    def add_rule(self, name: str, out_subset: str, rules_list: []):
+    def add_rule(self, name: str, out_subset: str, rules_list: [str]):
         membership_degrees = []
 
         for rule in rules_list:
-            set_name = rule.split(".")[0]
-            subset_name = rule.split(".")[-1]
+            set_name: str = rule.split(".")[0]
+            subset_name: str = rule.split(".")[-1]
 
             membership_degrees.append(
                 self.get_subset(set_name, subset_name).membership_degree
@@ -126,8 +136,16 @@ class FuzzyInferenceSystem:
         # run recursive fmax function for each of them
         out_margin = self.get_recursive_fmax(rule_results)
 
-        # Defuzzify the result
+        # defuzzify the result
         defuzzified = fuzz.defuzz(self.out_fuzzy_set.x_range, out_margin, defuzzification_method)
+
+        # todo - plot result
         result = fuzz.interp_membership(self.out_fuzzy_set.x_range, out_margin, defuzzified)
 
         return defuzzified
+
+    def plot_sets(self):
+        for fuzzy_set in self.fuzzy_sets:
+            fuzzy_set.plot()
+
+        self.out_fuzzy_set.plot()
