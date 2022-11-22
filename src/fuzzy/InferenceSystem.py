@@ -1,9 +1,35 @@
 import numpy as np
 import skfuzzy as fuzz
+import matplotlib.pyplot as plt
 import skfuzzy.membership as mf
 from src.fuzzy.Set import FuzzySet
 from src.fuzzy.Rule import FuzzyRule
 from src.fuzzy.Subset import FuzzySubset
+
+
+def plot_output(out_set: FuzzySet, out_margin: float, defuzzified: float, result: [float]):
+    risk0 = np.zeros_like(out_set.x_range)
+    fig, ax0 = plt.subplots()
+    colors = ['r', 'g', 'b', 'y', 'm']
+
+    color_index = 0
+    for subset in out_set.subsets:
+        ax0.plot(
+            out_set.x_range,
+            subset.membership_range,
+            colors[color_index],
+            linestyle='--',
+            label=subset.name
+        )
+        color_index += 1
+
+    ax0.fill_between(out_set.x_range, risk0, out_margin, facecolor='Orange', alpha=0.7)
+    ax0.plot([defuzzified, defuzzified], [0, result], 'k', linewidth=3, alpha=0.9)
+
+    ax0.set_title('Output Margin Area')
+    plt.tight_layout()
+    ax0.legend()
+    plt.show()
 
 
 class FuzzyInferenceSystem:
@@ -138,9 +164,15 @@ class FuzzyInferenceSystem:
 
         # defuzzify the result
         defuzzified = fuzz.defuzz(self.out_fuzzy_set.x_range, out_margin, defuzzification_method)
-
-        # todo - plot result
         result = fuzz.interp_membership(self.out_fuzzy_set.x_range, out_margin, defuzzified)
+
+        # plot output diagram
+        plot_output(
+            out_set=self.out_fuzzy_set,
+            out_margin=out_margin,
+            defuzzified=defuzzified,
+            result=result
+        )
 
         return defuzzified
 

@@ -2,8 +2,8 @@ from src.fuzzy.InferenceSystem import FuzzyInferenceSystem as Fis
 
 # Inputs--------------------------------------------------------------------------------------------------------------#
 basePrice_usd = 49.99                                                                                                 #
-pricingTerm_months = 3                                                                                                #
-productRating_stars = 2.5                                                                                             #
+pricingTerm_months = 10                                                                                               #
+productRating_stars = 5                                                                                               #
 # Inputs--------------------------------------------------------------------------------------------------------------#
 
 # Initialization of the Fuzzy Inference System
