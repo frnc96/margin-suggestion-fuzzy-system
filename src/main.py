@@ -1,7 +1,7 @@
 from src.fuzzy.InferenceSystem import FuzzyInferenceSystem as Fis
 
 # Inputs--------------------------------------------------------------------------------------------------------------#
-basePrice_usd = 49.99                                                                                                 #
+basePrice_usd = 50                                                                                                    #
 pricingTerm_months = 10                                                                                               #
 productRating_stars = 5                                                                                               #
 # Inputs--------------------------------------------------------------------------------------------------------------#
@@ -9,7 +9,8 @@ productRating_stars = 5                                                         
 # Initialization of the Fuzzy Inference System
 fuzzyInferenceSystem = Fis()
 
-# Here we declare all the input fuzzy sets and their membership functions
+# Here we declare all the input fuzzy sets and their membership functions (MF)
+# MF types can be 'trapezoidal' or 'triangular'
 pricingTerm_setName = "pricing_term"
 fuzzyInferenceSystem\
     .add_set(name=pricingTerm_setName, x_min=1, x_max=12, step=1, x=pricingTerm_months)\
@@ -48,10 +49,14 @@ fuzzyInferenceSystem\
     .add_rule(name="Rule#5", out_subset="little", rules_list=["product_rating.mid"])\
     .add_rule(name="Rule#6", out_subset="mid", rules_list=["product_rating.high"])
 
-# Run a centroid defuzzification method to get a crisp output
+# Run a centroid defuzzification method to get a crisp output. Other methods can be:
+# 'bisector': bisector of area
+# 'mom' : mean of maximum
+# 'som' : min of maximum
+# 'lom' : max of maximum
 outputValue_crisp = fuzzyInferenceSystem.defuzzify(defuzzification_method='centroid')
 
 # Print out the results
 print(f"Base Price: ${basePrice_usd}")
-print(f"Profit margin: %{(outputValue_crisp * 100):.3f}")
-print(f"Suggested Price: ${(basePrice_usd + (basePrice_usd * outputValue_crisp)):.3f}")
+print(f"Profit margin: %{outputValue_crisp * 100}")
+print(f"Suggested Price: ${(basePrice_usd + (basePrice_usd * outputValue_crisp)):.2f}")

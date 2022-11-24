@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from src.fuzzy.Subset import FuzzySubset
@@ -16,6 +17,7 @@ class FuzzySet:
         return self
 
     def plot(self):
+        plots_dir_path = os.path.abspath("../plots")
         fig, ax0 = plt.subplots()
 
         for subset in self.subsets:
@@ -29,6 +31,12 @@ class FuzzySet:
         ax0.set_title(self.name)
         ax0.legend()
         plt.tight_layout()
+        plt.savefig(
+            os.path.join(
+                plots_dir_path,
+                f'{self.name}_membership_functions.png'
+            )
+        )
         plt.show()
 
         return self

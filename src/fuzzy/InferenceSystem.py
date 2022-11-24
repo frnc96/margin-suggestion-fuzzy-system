@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import skfuzzy as fuzz
 import matplotlib.pyplot as plt
@@ -8,6 +9,7 @@ from src.fuzzy.Subset import FuzzySubset
 
 
 def plot_output(out_set: FuzzySet, out_margin: float, defuzzified: float, result: [float]):
+    plots_dir_path = os.path.abspath("../plots")
     risk0 = np.zeros_like(out_set.x_range)
     fig, ax0 = plt.subplots()
     colors = ['r', 'g', 'b', 'y', 'm']
@@ -29,6 +31,12 @@ def plot_output(out_set: FuzzySet, out_margin: float, defuzzified: float, result
     ax0.set_title('Output Margin Area')
     plt.tight_layout()
     ax0.legend()
+    plt.savefig(
+        os.path.join(
+            plots_dir_path,
+            f'{out_set.name}_output.png'
+        )
+    )
     plt.show()
 
 
