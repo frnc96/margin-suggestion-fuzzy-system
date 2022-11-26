@@ -6,6 +6,7 @@ import skfuzzy.membership as mf
 from src.fuzzy.Set import FuzzySet
 from src.fuzzy.Rule import FuzzyRule
 from src.fuzzy.Subset import FuzzySubset
+from src.helpers.Global import LabelHelper as Lh
 
 
 def plot_output(out_set: FuzzySet, out_margin: float, defuzzified: float, result: [float]):
@@ -21,14 +22,14 @@ def plot_output(out_set: FuzzySet, out_margin: float, defuzzified: float, result
             subset.membership_range,
             colors[color_index],
             linestyle='--',
-            label=subset.name
+            label=Lh.snake_case_to_label(subset.name)
         )
         color_index += 1
 
     ax0.fill_between(out_set.x_range, risk0, out_margin, facecolor='Orange', alpha=0.7)
     ax0.plot([defuzzified, defuzzified], [0, result], 'k', linewidth=3, alpha=0.9)
 
-    ax0.set_title('Output Margin Area')
+    ax0.set_title('Output margin area')
     plt.tight_layout()
     ax0.legend()
     plt.savefig(

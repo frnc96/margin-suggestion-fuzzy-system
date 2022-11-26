@@ -2,6 +2,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from src.fuzzy.Subset import FuzzySubset
+from src.helpers.Global import LabelHelper as Lh
 
 
 class FuzzySet:
@@ -17,6 +18,9 @@ class FuzzySet:
         return self
 
     def plot(self):
+        if self.name != "product_lifetime":  # todo - remove
+            return self
+
         plots_dir_path = os.path.abspath("../plots")
         fig, ax0 = plt.subplots()
 
@@ -25,10 +29,12 @@ class FuzzySet:
                 self.x_range,
                 subset.membership_range,
                 linewidth=2,
-                label=subset.name
+                label=Lh.snake_case_to_label(subset.name)
             )
 
-        ax0.set_title(self.name)
+        ax0.set_title(
+            Lh.snake_case_to_label(self.name)
+        )
         ax0.legend()
         plt.tight_layout()
         plt.savefig(

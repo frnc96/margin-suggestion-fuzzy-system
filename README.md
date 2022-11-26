@@ -16,12 +16,14 @@ The system follows a MISO (Multi Input Single Output) structure, consists of X r
 
 Listed below are all the fuzzy sets that we use in our system. For our purposes we used only `trapezoidal` and `triangular` membership functions to represent each of the subsets.
 
-* Pricing term (short, mid, long)
-* Monthly active users (low, mid, high)
-* Daily usage hours (low, mid, high)
-* Monthly net positive feedback (negative, low, mid, high)
-* Product market GDP (low, mid, high)
-* ...
+* [Value-based pricing article](https://www.smartkarrot.com/resources/blog/value-based-pricing/)
+  * Product age (early, mid, mature)
+  * Monthly active users (low, mid, high)
+  * Third party integrations (low, mid, high)
+  * Enterprise features (low, mid, high)
+  * Branding (budget, value, premium)
+  * Product rating (poor, fair, good)
+  * Target audience mean income (low, mid, high)
 
 ### Fuzzification
 
