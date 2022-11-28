@@ -1,13 +1,13 @@
 from src.fuzzy.InferenceSystem import FuzzyInferenceSystem as Fis
 
 # Inputs--------------------------------------------------------------------------------------------------------------#
-basePrice_usd = 50                      # Base price of the products
-productLifetime_years = 10              # How long has the product bee on the market
-monthlyActive_kUsers = 10               # How many monthly active users use the product
-thirdParty_integrations = 3             # How many third party integrations does the product offer
-enterprise_features = 3                 # How many enterprise features does the product offer
-branding_percent = 25                   # What percentage of revenue is spent on marketing
-targetAudienceMeanIncome_kUsd = 50      # Mean income of the targeted audience
+basePrice_usd = 50                       # Base price of the products
+productLifetime_years = 7                # How long has the product bee on the market
+monthlyActive_kUsers = 75                # How many monthly active users use the product
+thirdParty_integrations = 3              # How many third party integrations does the product offer
+enterprise_features = 1                  # How many enterprise features does the product offer
+branding_percent = 5                     # What percentage of revenue is spent on marketing
+targetAudienceMeanIncome_kUsd = 110      # Mean income of the targeted audience
 # Inputs--------------------------------------------------------------------------------------------------------------#
 
 # Initialization of the Fuzzy Inference System
@@ -63,9 +63,9 @@ fuzzyInferenceSystem\
 fuzzyInferenceSystem\
     .add_out_set(name="output_margin", x_min=0, x_max=3, step=0.01)\
     .add_out_subset(name="slim", membership_range=[0, 0, 0.1, 0.25], mf_type="trapezoidal")\
-    .add_out_subset(name="little", membership_range=[0.1, 0.35, 0.7], mf_type="triangular")\
-    .add_out_subset(name="mid", membership_range=[0.4, 0.9, 1.4], mf_type="triangular")\
-    .add_out_subset(name="high", membership_range=[1, 1.62, 2.25], mf_type="triangular")\
+    .add_out_subset(name="little", membership_range=[0.1, 0.25, 0.45, 0.7], mf_type="trapezoidal")\
+    .add_out_subset(name="mid", membership_range=[0.4, 0.7, 1.1, 1.4], mf_type="trapezoidal")\
+    .add_out_subset(name="high", membership_range=[1, 1.42, 1.82, 2.25], mf_type="trapezoidal")\
     .add_out_subset(name="very_high", membership_range=[1.75, 2.25, 3, 3], mf_type="trapezoidal")
 
 # Plot the sets
@@ -108,6 +108,7 @@ rule_list = [
     ["Rule#31", "slim",         ["monthly_active_users.low", "third_party_integrations.low", "enterprise_features.low", "branding.budget", "target_audience_mean_income.low"]],
     ["Rule#32", "high",         ["third_party_integrations.low", "enterprise_features.low", "branding.premium", "target_audience_mean_income.high"]],
 ]
+
 # All the rules are inserted into the FIS
 for rule_item in rule_list:
     fuzzyInferenceSystem.add_rule(name=rule_item[0], out_subset=rule_item[1], rules_list=rule_item[2])
@@ -120,6 +121,6 @@ for rule_item in rule_list:
 outputValue_crisp = fuzzyInferenceSystem.defuzzify(defuzzification_method='centroid')
 
 # Print out the results
-print(f"Base Price: ${basePrice_usd}/month")
+print(f"Base Price: ${basePrice_usd}")
 print(f"Profit margin: %{outputValue_crisp * 100}")
-print(f"Suggested Price: ${(basePrice_usd + (basePrice_usd * outputValue_crisp)):.2f}/month")
+print(f"Suggested Price: ${(basePrice_usd + (basePrice_usd * outputValue_crisp)):.2f}")
