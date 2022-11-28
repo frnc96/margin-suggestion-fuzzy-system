@@ -18,8 +18,8 @@ class FuzzySet:
         return self
 
     def plot(self):
-        if self.name != "product_lifetime":  # todo - remove
-            return self
+        # comment line below to plot MF
+        return self
 
         plots_dir_path = os.path.abspath("../plots")
         fig, ax0 = plt.subplots()
