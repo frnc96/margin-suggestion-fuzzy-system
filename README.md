@@ -21,7 +21,6 @@ Listed below are all the fuzzy sets that we use in our system. For our purposes 
 * Third party integrations (low, mid, high)
 * Enterprise features (low, mid, high)
 * Branding (budget, value, premium)
-* Product rating (poor, fair, good)
 * Target audience mean income (low, mid, high)
 
 ### Fuzzification
