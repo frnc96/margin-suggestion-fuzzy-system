@@ -1,6 +1,6 @@
 # Value-Based pricing suggestions for SaaS products using Fuzzy Logic
 
-In this project we have built a Mamdani style Fuzzy Inference System (FIS) that takes as an input a number of environmental crisp parameters of a Software as a Service (SaaS) product which and returns a suggested profit margin that can be any value for 10% to 300%. We chose the Mamdani type of system because its intuitiveness, suitability for human input and easily interpretable rule base was suitable for the approach we took to solve the problem.
+In this project we have built a Mamdani style Fuzzy Inference System (FIS) that takes as an input a number of environmental crisp parameters of a Software as a Service (SaaS) product which and returns a suggested profit margin that can be any value for 5% to 300%. We chose the Mamdani type of system because its intuitiveness, suitability for human input and easily interpretable rule base was suitable for the approach we took to solve the problem.
 
 ## Getting started
 
@@ -10,20 +10,19 @@ In this project we have built a Mamdani style Fuzzy Inference System (FIS) that 
 
 ## Structure
 
-The system follows a MISO (Multi Input Single Output) structure, consists of X rule bases and is composed of three main modules, fuzzification, inference and defuzzification. The input fuzzy sets and rules are generated using common sense by experienced field experts so the system is built with modularity and readability in mind so changing the parameters or rules can be as easy as possible.
+The system follows a MISO (Multi Input Single Output) structure, consists of 32 rule bases and is composed of three main modules, fuzzification, inference and defuzzification. The input fuzzy sets and rules are generated using common sense by experienced field experts so the system is built with modularity and readability in mind so changing the parameters or rules can be as easy as possible.
 
 ### Fuzzy Sets
 
 Listed below are all the fuzzy sets that we use in our system. For our purposes we used only `trapezoidal` and `triangular` membership functions to represent each of the subsets.
 
-* [Value-based pricing article](https://www.smartkarrot.com/resources/blog/value-based-pricing/)
-  * Product age (early, mid, mature)
-  * Monthly active users (low, mid, high)
-  * Third party integrations (low, mid, high)
-  * Enterprise features (low, mid, high)
-  * Branding (budget, value, premium)
-  * Product rating (poor, fair, good)
-  * Target audience mean income (low, mid, high)
+* Product age (early, mid, mature)
+* Monthly active users (low, mid, high)
+* Third party integrations (low, mid, high)
+* Enterprise features (low, mid, high)
+* Branding (budget, value, premium)
+* Product rating (poor, fair, good)
+* Target audience mean income (low, mid, high)
 
 ### Fuzzification
 
@@ -47,8 +46,7 @@ Currently, the system is validated by human reasoning but in the future a testin
 
 ## Experts
 
-John Doe - john.doe@gmail.com\
-John Doe - john.doe@gmail.com
+David Henzel - https://www.davidhenzel.com/
 
 ## Collaborators
 

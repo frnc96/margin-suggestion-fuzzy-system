@@ -2,12 +2,12 @@ from src.fuzzy.InferenceSystem import FuzzyInferenceSystem as Fis
 
 # Inputs--------------------------------------------------------------------------------------------------------------#
 basePrice_usd = 50                       # Base price of the products
-productLifetime_years = 7                # How long has the product bee on the market
-monthlyActive_kUsers = 75                # How many monthly active users use the product
-thirdParty_integrations = 3              # How many third party integrations does the product offer
-enterprise_features = 1                  # How many enterprise features does the product offer
+productLifetime_years = 9                # How long has the product bee on the market
+monthlyActive_kUsers = 1                # How many monthly active users use the product
+thirdParty_integrations = 5              # How many third party integrations does the product offer
+enterprise_features = 0                  # How many enterprise features does the product offer
 branding_percent = 5                     # What percentage of revenue is spent on marketing
-targetAudienceMeanIncome_kUsd = 110      # Mean income of the targeted audience
+targetAudienceMeanIncome_kUsd = 15      # Mean income of the targeted audience
 # Inputs--------------------------------------------------------------------------------------------------------------#
 
 # Initialization of the Fuzzy Inference System

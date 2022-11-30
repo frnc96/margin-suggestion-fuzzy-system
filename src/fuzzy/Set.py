@@ -19,7 +19,7 @@ class FuzzySet:
 
     def plot(self):
         # comment line below to plot MF
-        # return self
+        return self
 
         plots_dir_path = os.path.abspath("../plots")
         fig, ax0 = plt.subplots()
