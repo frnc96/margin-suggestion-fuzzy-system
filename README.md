@@ -1,6 +1,6 @@
 # Value-Based pricing suggestions for SaaS products using Fuzzy Logic
 
-In this project we have built a Mamdani style Fuzzy Inference System (FIS) that takes as an input a number of environmental crisp parameters of a Software as a Service (SaaS) product which and returns a suggested profit margin that can be any value for 5% to 300%. We chose the Mamdani type of system because its intuitiveness, suitability for human input and easily interpretable rule base was suitable for the approach we took to solve the problem.
+In this project we have built a Mamdani style Fuzzy Inference System (FIS) that takes as an input a number of environmental crisp parameters of a Software as a Service (SaaS) product which returns a suggested profit margin that can be any value from 5% to 300%. We chose the Mamdani type of system because of its intuitiveness, suitability for human input and easily interpretable rule base. This made it suitable for the approach we took to solve the problem.
 
 ## Getting started
 
