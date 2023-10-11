@@ -9,11 +9,13 @@ from src.fuzzy.Subset import FuzzySubset
 from src.helpers.Global import LabelHelper as Lh
 
 
-def plot_output(out_set: FuzzySet, out_margin: float, defuzzified: float, result: [float]):
+def plot_output(
+    out_set: FuzzySet, out_margin: float, defuzzified: float, result: [float]
+):
     plots_dir_path = os.path.abspath("../plots")
     risk0 = np.zeros_like(out_set.x_range)
     fig, ax0 = plt.subplots()
-    colors = ['r', 'g', 'b', 'y', 'm']
+    colors = ["r", "g", "b", "y", "m"]
 
     color_index = 0
     for subset in out_set.subsets:
@@ -21,23 +23,18 @@ def plot_output(out_set: FuzzySet, out_margin: float, defuzzified: float, result
             out_set.x_range,
             subset.membership_range,
             colors[color_index],
-            linestyle='--',
-            label=Lh.snake_case_to_label(subset.name)
+            linestyle="--",
+            label=Lh.snake_case_to_label(subset.name),
         )
         color_index += 1
 
-    ax0.fill_between(out_set.x_range, risk0, out_margin, facecolor='Orange', alpha=0.7)
-    ax0.plot([defuzzified, defuzzified], [0, result], 'k', linewidth=3, alpha=0.9)
+    ax0.fill_between(out_set.x_range, risk0, out_margin, facecolor="Orange", alpha=0.7)
+    ax0.plot([defuzzified, defuzzified], [0, result], "k", linewidth=3, alpha=0.9)
 
-    ax0.set_title('Output margin area')
+    ax0.set_title("Output margin area")
     plt.tight_layout()
     ax0.legend()
-    plt.savefig(
-        os.path.join(
-            plots_dir_path,
-            f'{out_set.name}_output.png'
-        )
-    )
+    plt.savefig(os.path.join(plots_dir_path, f"{out_set.name}_output.png"))
     plt.show()
 
 
@@ -48,9 +45,7 @@ class FuzzyInferenceSystem:
         self.out_fuzzy_set = None
 
     def add_set(self, name: str, x_min: float, x_max: float, x: float, step: float = 1):
-        self.fuzzy_sets.append(
-            FuzzySet(name, x_min, x_max, step, x)
-        )
+        self.fuzzy_sets.append(FuzzySet(name, x_min, x_max, step, x))
 
         return self
 
@@ -59,7 +54,13 @@ class FuzzyInferenceSystem:
 
         return self
 
-    def add_subset(self, name: str, set_name: str, membership_range: [float], mf_type: str = "trapezoidal"):
+    def add_subset(
+        self,
+        name: str,
+        set_name: str,
+        membership_range: [float],
+        mf_type: str = "trapezoidal",
+    ):
         for fuzzy_set in self.fuzzy_sets:
             if fuzzy_set.name == set_name:
                 if mf_type == "trapezoidal":
@@ -67,31 +68,45 @@ class FuzzyInferenceSystem:
                 elif mf_type == "triangular":
                     membership_function = mf.trimf(fuzzy_set.x_range, membership_range)
                 else:
-                    raise Exception(f"Membership function of type {mf_type} does not exist or is not supported!")
+                    raise Exception(
+                        f"Membership function of type {mf_type} does not exist or is not supported!"
+                    )
 
-                membership_degree = fuzz.interp_membership(fuzzy_set.x_range, membership_function, fuzzy_set.x)
+                membership_degree = fuzz.interp_membership(
+                    fuzzy_set.x_range, membership_function, fuzzy_set.x
+                )
 
                 fuzzy_set.add_subset(
                     FuzzySubset(
                         name=name,
                         membership_degree=membership_degree,
-                        membership_range=membership_function
+                        membership_range=membership_function,
                     )
                 )
                 break
 
         return self
 
-    def add_out_subset(self, name: str, membership_range: [float], mf_type: str = "trapezoidal"):
+    def add_out_subset(
+        self, name: str, membership_range: [float], mf_type: str = "trapezoidal"
+    ):
         if mf_type == "trapezoidal":
-            membership_function = mf.trapmf(self.out_fuzzy_set.x_range, membership_range)
+            membership_function = mf.trapmf(
+                self.out_fuzzy_set.x_range, membership_range
+            )
         elif mf_type == "triangular":
             membership_function = mf.trimf(self.out_fuzzy_set.x_range, membership_range)
         else:
-            raise Exception(f"Membership function of type {mf_type} does not exist or is not supported!")
+            raise Exception(
+                f"Membership function of type {mf_type} does not exist or is not supported!"
+            )
 
         self.out_fuzzy_set.add_subset(
-            FuzzySubset(name=name, membership_degree=membership_function, membership_range=membership_function)
+            FuzzySubset(
+                name=name,
+                membership_degree=membership_function,
+                membership_range=membership_function,
+            )
         )
 
         return self
@@ -164,23 +179,25 @@ class FuzzyInferenceSystem:
                     subset_rules_minima.append(rule.minima)
 
             if len(subset_rules_minima) > 1:
-                rule_results.append(
-                    self.get_recursive_fmax(subset_rules_minima)
-                )
+                rule_results.append(self.get_recursive_fmax(subset_rules_minima))
 
         # run recursive fmax function for each of them
         out_margin = self.get_recursive_fmax(rule_results)
 
         # defuzzify the result
-        defuzzified = fuzz.defuzz(self.out_fuzzy_set.x_range, out_margin, defuzzification_method)
-        result = fuzz.interp_membership(self.out_fuzzy_set.x_range, out_margin, defuzzified)
+        defuzzified = fuzz.defuzz(
+            self.out_fuzzy_set.x_range, out_margin, defuzzification_method
+        )
+        result = fuzz.interp_membership(
+            self.out_fuzzy_set.x_range, out_margin, defuzzified
+        )
 
         # plot output diagram
         plot_output(
             out_set=self.out_fuzzy_set,
             out_margin=out_margin,
             defuzzified=defuzzified,
-            result=result
+            result=result,
         )
 
         return defuzzified

@@ -29,19 +29,14 @@ class FuzzySet:
                 self.x_range,
                 subset.membership_range,
                 linewidth=2,
-                label=Lh.snake_case_to_label(subset.name)
+                label=Lh.snake_case_to_label(subset.name),
             )
 
-        ax0.set_title(
-            Lh.snake_case_to_label(self.name)
-        )
+        ax0.set_title(Lh.snake_case_to_label(self.name))
         ax0.legend()
         plt.tight_layout()
         plt.savefig(
-            os.path.join(
-                plots_dir_path,
-                f'{self.name}_membership_functions.png'
-            )
+            os.path.join(plots_dir_path, f"{self.name}_membership_functions.png")
         )
         plt.show()
 
